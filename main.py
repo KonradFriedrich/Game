@@ -2,8 +2,9 @@ import pygame as pg
 import random
 from pygame_functions import *
 #from map import *
-import threading
-#from map import MapSlicer, MapDraw
+#import threading
+from map import *
+from screenclass import *
 
 global\
 bgx, bgy, screen
@@ -13,15 +14,7 @@ bgx, bgy, screen
 # init pg
 pg.init()
 
-# create window
-screenX = 800
-screenY = 600
-screen = pg.display.set_mode((screenX, screenY))
-
-# title and icon (change later)
-pg.display.set_caption("Hack and Slay")
-icon = pg.image.load('img/knight.png')
-pg.display.set_icon(icon)
+MapSlicer('img/floorwood.png', 50, 50)
 
 
 # Player position
@@ -65,6 +58,7 @@ while running:
     #backg = newSprite('img/10x10.png', 1)
     backg = pygame.image.load('img/1000x1000grey.png')
     screen.blit(backg, (0, 0))
+    MapDraw(300, 300, World)
 
 
 
@@ -155,9 +149,9 @@ while running:
 
 
 
-    clock.tick()
+    clock.tick(1)
     fps = clock.get_fps()
-    #print(fps)
+    print(fps)
 
     if playerXhit in enemyXhit and playerYhit in enemyYhit:
         running = False
