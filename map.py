@@ -10,12 +10,11 @@ import re
 pygame.init
 
 global \
-    imgwidth, imgheight
+    twidth, theight
 
 World = {}
 SeeWorld = []
-imgheight = 0
-imgwidth = 0
+
 
 
 
@@ -27,9 +26,10 @@ def MapDraw(bgx, bgy, WorldDict):
 
 
     # player fov box rounded too hundreds, +100 bcs rounded up
+    #change the ranges so they work!
     PlayerFovX = range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100)
     PlayerFovY = range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100)
-    print(PlayerFovX)
+
     #print(PlayerFovY)
 
 
@@ -49,7 +49,7 @@ def MapDraw(bgx, bgy, WorldDict):
                 square = pygame.image.load(WorldDict[i]["loc"])
                 print(square.get_rect())
 
-                screen.blit(square, (GetX * imgwidth, GetY * imgheight))
+                screen.blit(square, (GetX * twidth, GetY * theight))
                 print(i)
                 print(WorldDict[i]["corners"][0][0], WorldDict[i]["corners"][0][1])
                 break
@@ -101,6 +101,7 @@ def MapSlicer(Map, screenW, screenH):
                 # ("img/tile-" + x + "-" + str(i) + "#" + str(j) + "-" + ".png")
             World["Tile" + str(x)]["corners"] = [topl, topr, botl, botr]
     print(World)
+    print(twidth)
 
 
 
