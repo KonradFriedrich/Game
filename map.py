@@ -45,6 +45,7 @@ def MapDraw(bgx, bgy, World):
 
 
 def MapSlicer(Map, screenW, screenH):
+
     
     x = 0
 
