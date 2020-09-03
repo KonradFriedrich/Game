@@ -1,0 +1,48 @@
+def MapDraw(bgx, bgy, World):
+
+
+    for i in World:
+
+        # get the important tiles
+        for i in World:
+            # much computing power going in there make it search only 1 time per sec? and give it big radius?
+
+            #solution       make 4 dots (on the corners) check if smaller then 4 corners or use kanten of screen important !!!!!!!!!!!! use : </>
+            #new problem how to check if i still seee it if i only have lines
+            #entfernung zum spieler (mit sinus)
+            #ecken rein ecken raus checken (bei erst eintritt an, zweites mal aus, dann wieder an usw)
+
+            #idea 2 make steps higher
+            #problem if the last integer is different two nums will never be the same (10 steps -> 1901,1911,1921 usw - 1900,1910,1920) never the same
+            #solve= round the num up to hundreds and use 100 steps  1901 -> 1900,2000 = 1980 -> 2000 = 1920 -> 1900,2000 so do this!!!!!
+
+            #do "hotpots" set points on map with info which pieces to load if this point is in player line of sight
+            #if hotspot  4 is triggered check if hotspot 6 is triggered if y then load these frames and unload these
+
+            #idea 2 = 17.6 mil idea 2+3 = 1.1mil loading whole map = 100 mil hotspot in play range= 17 mrd
+            if World[i[2]] in range(playerX - screenX / 2, playerX + screenX / 2 + 100, 1) \
+                    and World[i[3]] in range(playerY - screenY / 2, playerY + screenY / 2 + 100, 1):
+                SeeWorld.append(World[i[1]])
+
+            # make the fov limits for the player
+            # round playerfov up and then go in hundreds for less calcs
+            # extra -100 bcs round upp to hundreds
+            PlayerFovX = range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100,int(math.ceil(bgx / 100.0)) * 100, 100)
+            PlayerFovY = range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100,int(math.ceil(bgy / 100.0)) * 100, 100)
+
+            # loop through tiles
+    for i in World:
+                # loop through corners (not the first part bcs pic!)
+        for j in islice(World, 1, None):
+            if World[i[j[1]]] in PlayerFovY and World[i[j[2]] in PlayerFovX:
+                screen.blit(World[i[1]], (World[i[1[1]]], World[i[1[2]]]))
+            else:
+                x=1
+
+            # blit single tiles
+
+            #for j in SeeWorld:
+            #    tx = re.search("-(.*)#", str(SeeWorld[j]))
+            #    ty = re.search("#(.*)-", str(SeeWorld[j]))
+            #    pygame.blit(World[i], [bgx + (tx * imheight), bgy + (ty * imheight)])
+gy + (ty * imheight)])
