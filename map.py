@@ -45,10 +45,11 @@ def MapDraw(bgx, bgy, World):
 
 
 def MapSlicer(Map, screenW, screenH):
+    
     x = 0
 
     # getting the sizes
-    im = Image.open('img/floorwood.png')
+    im = Image.open(Map)
     print(im.width)
     imgwidth, imgheight = im.size
     #im = pygame.image.load(Map)
