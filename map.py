@@ -80,9 +80,7 @@ def MapSlicer(Map, screenW, screenH):
             botr = [int(math.ceil(theight * (i + 1) / 100.0)) * 100, int(math.ceil(twidth * (j + 1) / 100.0)) * 100]
 
             # create world list
-            World["Tile" + str(x)] = {"loc" : 1,
-                                      "corners" : 1,
-                                      }
+            World["Tile" + str(x)] = {}
             World["Tile" + str(x)]["loc"] = f"img/tile-{x}-{i + 1}#{j + 1}-.png"
                 # ("img/tile-" + x + "-" + str(i) + "#" + str(j) + "-" + ".png")
             World["Tile" + str(x)]["corners"] = [topl, topr, botl, botr]
