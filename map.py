@@ -1,9 +1,7 @@
 from PIL import Image
 from screenclass import *
 import math
-from itertools import islice
 import pygame
-import re
 
 # this concludes functons which cuts, draws and only draw special tiles of the map
 
@@ -26,32 +24,22 @@ def MapDraw(bgx, bgy, WorldDict):
 
 
     # player fov box rounded too hundreds, +100 bcs rounded up
-    #change the ranges so they work!
+    # change the ranges so they work!
     PlayerFovX = range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100)
     PlayerFovY = range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100)
-
-    #print(PlayerFovY)
 
 
 
     # loop through tiles
     for i in WorldDict:
-        #print(WorldDict[i])
-        #print(WorldDict[i]["corners"])
         for j in WorldDict[i]["corners"]:
-            #print(j)
             if j[0] in PlayerFovY and j[1] in PlayerFovX:
-                #screen.blit(WorldDict[i["loc"]], (WorldDict[i]["corners"]["topl"][0], WorldDict[i]["corners"]["topl"][1]))
-                #print(f"{j} + see")
-                #print(WorldDict[i]["corners"][1])
-                GetX = re.search('#(.*)-', str(WorldDict[i]["loc"]))
-                GetY = re.search('-(.*)#', str(WorldDict[i]["loc"]))
+                GetX = WorldDict[i]["loc"].split("#")[1]
+                GetY = WorldDict[i]["loc"].split("#")[2]
                 square = pygame.image.load(WorldDict[i]["loc"])
-                print(square.get_rect())
 
-                screen.blit(square, (GetX * twidth, GetY * theight))
-                print(i)
-                print(WorldDict[i]["corners"][0][0], WorldDict[i]["corners"][0][1])
+
+                screen.blit(square, ((int(GetX) - 1) * twidth, (int(GetY) - 1) * theight))
                 break
 
 
@@ -71,16 +59,15 @@ def MapSlicer(Map, screenW, screenH):
 
     # getting the sizes
     im = Image.open(Map)
-    #print(im.width)
     imgwidth, imgheight = im.size
-    #print(imgwidth)
-    #print(imgheight)
 
 
     rows = imgwidth / screenW / 4
     columns = imgheight / screenH / 4
+    global theight, twidth
     theight = imgheight // math.ceil(columns)
     twidth = imgwidth // math.ceil(rows)
+
 
     # cutting it small
     for i in range(0, math.ceil(rows)):
@@ -88,7 +75,7 @@ def MapSlicer(Map, screenW, screenH):
             tile = im.crop((i * twidth, j * theight, (i + 1) * twidth, (j + 1) * theight))
             x += 1
             # save the image
-            tile.save(f"img/tile{x}-{i + 1}#{j + 1}-.png")
+            tile.save(f"img/tile{x}#{i + 1}#{j + 1}#.png")
             # tile corners for loading points (and round up to hundreds for easier calc)
             topl = [int(math.ceil(twidth * j / 100.0)) * 100, int(math.ceil(theight * i / 100.0)) * 100]
             topr = [int(math.ceil(twidth * (j + 1) / 100.0)) * 100, int(math.ceil(theight * i / 100.0)) * 100]
@@ -97,11 +84,10 @@ def MapSlicer(Map, screenW, screenH):
 
             # create world dict
             World["Tile" + str(x)] = {}
-            World["Tile" + str(x)]["loc"] = f"img/tile{x}-{i + 1}#{j + 1}-.png"
+            World["Tile" + str(x)]["loc"] = f"img/tile{x}#{i + 1}#{j + 1}#.png"
                 # ("img/tile-" + x + "-" + str(i) + "#" + str(j) + "-" + ".png")
             World["Tile" + str(x)]["corners"] = [topl, topr, botl, botr]
     print(World)
-    print(twidth)
 
 
 

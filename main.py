@@ -14,7 +14,7 @@ bgx, bgy, screen
 # init pg
 pg.init()
 
-MapSlicer('img/floorwood.png', 50, 50)
+
 
 
 # Player position
@@ -50,7 +50,10 @@ clock = pygame.time.Clock()
 #map = threading.Thread(target=MapSlicer, args=('img/floorwood.png', 50, 50))
 #map.start()
 
+bgx = 1200
+bgy = 1200
 
+MapSlicer('img/10x10.png', 50, 50)
 
 # game loop
 running = True
@@ -58,7 +61,7 @@ while running:
     #backg = newSprite('img/10x10.png', 1)
     backg = pygame.image.load('img/1000x1000grey.png')
     screen.blit(backg, (0, 0))
-    MapDraw(300, 300, World)
+    MapDraw(1200, 1200, World)
 
 
 
@@ -71,6 +74,7 @@ while running:
             if event.key == pg.K_LEFT:
                 playerXch += -0.0006
                 viewX += -1
+                bgx += 1
             if event.key == pg.K_RIGHT:
                 playerXch += 0.0006
                 viewX += 1
@@ -86,6 +90,7 @@ while running:
             if event.key == pg.K_LEFT:
                 playerXch += 0.0006
                 viewX = 1
+                bgx += -1
             if event.key == pg.K_RIGHT:
                 playerXch += -0.0006
                 viewX = -1
@@ -149,7 +154,7 @@ while running:
 
 
 
-    clock.tick(1)
+    clock.tick()
     fps = clock.get_fps()
     print(fps)
 

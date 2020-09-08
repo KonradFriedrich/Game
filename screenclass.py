@@ -4,8 +4,8 @@ import pygame as pg
 pg.init()
 
 # create window
-screenX = 800
-screenY = 600
+screenX = 1200
+screenY = 1200
 screen = pg.display.set_mode((screenX, screenY))
 
 # title and icon (change later)
