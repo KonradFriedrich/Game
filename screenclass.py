@@ -12,3 +12,5 @@ screen = pg.display.set_mode((screenX, screenY))
 pg.display.set_caption("Hack and Slay")
 icon = pg.image.load('img/knight.png')
 pg.display.set_icon(icon)
+bgx = 0
+bgy = 0

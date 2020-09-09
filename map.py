@@ -27,6 +27,7 @@ def MapDraw(bgx, bgy, WorldDict):
     # change the ranges so they work!
     PlayerFovX = range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100)
     PlayerFovY = range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100)
+    print(bgx)
 
 
 
@@ -37,9 +38,10 @@ def MapDraw(bgx, bgy, WorldDict):
                 GetX = WorldDict[i]["loc"].split("#")[1]
                 GetY = WorldDict[i]["loc"].split("#")[2]
                 square = pygame.image.load(WorldDict[i]["loc"])
+                print(bgx)
 
 
-                screen.blit(square, ((int(GetX) - 1) * twidth, (int(GetY) - 1) * theight))
+                screen.blit(square, ((int(GetX) - 1) * twidth + bgx, (int(GetY) - 1) * theight + bgy))
                 break
 
 
