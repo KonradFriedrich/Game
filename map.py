@@ -22,27 +22,43 @@ SeeWorld = []
 # map drawing function
 def MapDraw(bgx, bgy, WorldDict):
 
+    z = 0
 
     # player fov box rounded too hundreds, +100 bcs rounded up
     # change the ranges so they work!
-    PlayerFovX = range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100)
-    PlayerFovY = range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100)
-    print(bgx)
 
 
+
+
+    PlayerFovX = range(int(math.ceil(bgx / 100.0)) * 100, int(math.ceil((bgx + 600 + 200) / 100.0)) * 100, 100)
+    #PlayerFovX = range(int(math.ceil(bgx / 100.0)) * 100, int(math.ceil((bgx + 600 + 100) / 100.0)) * 100, 100)
+    PlayerFovY = range(int(math.ceil(bgy / 100.0)) * 100, int(math.ceil((bgy + 600 + 200) / 100.0)) * 100, 100)
+    #PlayerFovY = range(int(math.ceil(bgy / 100.0)) * 100, int(math.ceil((bgy + 600 + 100) / 100.0)) * 100, 100)
+    #print(bgx)
+
+    print(PlayerFovX)
+    print(PlayerFovY)
+
+    #rbgy = math.ceil(bgy / 100) * 100
+    #rbgx = math.ceil(bgx / 100) * 100
+    rbgy = 0
+    rbgx = 0
 
     # loop through tiles
     for i in WorldDict:
         for j in WorldDict[i]["corners"]:
-            if j[0] in PlayerFovY and j[1] in PlayerFovX:
+            if (j[0] + rbgy) in PlayerFovY and (j[1] + rbgx) in PlayerFovX:
                 GetX = WorldDict[i]["loc"].split("#")[1]
                 GetY = WorldDict[i]["loc"].split("#")[2]
                 square = pygame.image.load(WorldDict[i]["loc"])
-                print(bgx)
+                #print(bgx)
 
 
-                screen.blit(square, ((int(GetX) - 1) * twidth + bgx, (int(GetY) - 1) * theight + bgy))
+                #screen.blit(square, ((int(GetX) - 1) * twidth + bgx + startposX, (int(GetY) - 1) * theight + bgy + startposY))
+                screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
+                z += 1
                 break
+    print(z)
 
 
                 # Maybe faster like this:
@@ -74,6 +90,7 @@ def MapSlicer(Map, screenW, screenH):
     # cutting it small
     for i in range(0, math.ceil(rows)):
         for j in range(0, math.ceil(columns)):
+            # the cutout
             tile = im.crop((i * twidth, j * theight, (i + 1) * twidth, (j + 1) * theight))
             x += 1
             # save the image

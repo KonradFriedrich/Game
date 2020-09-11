@@ -1,6 +1,5 @@
 import pygame as pg
 import random
-from pygame_functions import *
 #from map import *
 #import threading
 from map import *
@@ -46,14 +45,11 @@ def enemypos(x, y):
 
 clock = pygame.time.Clock()
 
-#MapSlicer('img/floorwood.png', 50, 50)
-#map = threading.Thread(target=MapSlicer, args=('img/floorwood.png', 50, 50))
-#map.start()
 
 bgxs = 0
 bgys = 0
 
-MapSlicer('img/floorwood.png', 50, 50)
+MapSlicer('img/3kx3k.jpg', 50, 50)
 
 # game loop
 running = True
@@ -62,7 +58,7 @@ while running:
     backg = pygame.image.load('img/1000x1000grey.png')
     screen.blit(backg, (0, 0))
     MapDraw(bgx, bgy, World)
-    print(bgx)
+    #print(bgx)
 
 
 
@@ -73,40 +69,32 @@ while running:
         # movement x-y axis
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
-                playerXch += -0.0006
                 viewX += -1
-                bgxs += -1
-            if event.key == pg.K_RIGHT:
-                playerXch += 0.0006
-                viewX += 1
                 bgxs += 1
+            if event.key == pg.K_RIGHT:
+                viewX += 1
+                bgxs += -1
             if event.key == pg.K_UP:
-                playerYch += -0.0006
                 viewY += 1
-                bgys += -1
-            if event.key == pg.K_DOWN:
-                playerYch += 0.0006
-                viewY += -1
                 bgys += 1
+            if event.key == pg.K_DOWN:
+                viewY += -1
+                bgys += -1
 
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:
-                playerXch += 0.0006
                 viewX = 1
-                bgxs += 1
-            if event.key == pg.K_RIGHT:
-                playerXch += -0.0006
-                viewX = -1
                 bgxs += -1
+            if event.key == pg.K_RIGHT:
+                viewX = -1
+                bgxs += 1
             if event.key == pg.K_UP:
-                playerYch += 0.0006
                 viewY += 1
-                bgys += 1
-            if event.key == pg.K_DOWN:
-                playerYch += -0.0006
-                viewY += -1
                 bgys += -1
+            if event.key == pg.K_DOWN:
+                viewY += -1
+                bgys += 1
 
 
     bgx = bgxs + bgx
