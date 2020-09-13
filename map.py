@@ -18,20 +18,30 @@ SeeWorld = []
 
 
 
+startposx = 600
+startposy = 600
 
 # map drawing function
-def MapDraw(bgx, bgy, WorldDict, FX, FY):
+def MapDraw(cbgx, cbgy, WorldDict, cFX, cFY):
 
+    global FX, FY, bgx, bgy
 
     # player fov box rounded too hundreds, +100 bcs rounded up
     # change the ranges so they work!
-    RFX += FX
-    RFY += FY
-    PlayerFovX = range(int(math.ceil((RFX - screenX - 100) / 100.0)) * 100, int(math.ceil(RFX / 100.0)) * 100, 100)
-    PlayerFovY = range(int(math.ceil((RFY - screenX - 100) / 100.0)) * 100, int(math.ceil(RFY / 100.0)) * 100, 100)
+    FX += cFX
+    FY += cFY
+
+    bgx += cbgx
+    bgy += cbgy
+
+    #print(FX)
+    #print(bgx)
+
+    PlayerFovX = range(int(math.ceil(FX / 100.0)) * 100, int(math.ceil((FX + screenX + 200) / 100.0)) * 100, 100)
+    PlayerFovY = range(int(math.ceil(FY / 100.0)) * 100, int(math.ceil((FY + screenY + 200) / 100.0)) * 100, 100)
 
 
-
+    z = 0
     # loop through tiles
     for i in WorldDict:
         for j in WorldDict[i]["corners"]:
@@ -41,8 +51,10 @@ def MapDraw(bgx, bgy, WorldDict, FX, FY):
                 square = pygame.image.load(WorldDict[i]["loc"])
 
 
-                screen.blit(square, ((int(tileX) - 1) * twidth + bgx, (int(tileY) - 1) * theight + bgy))
+                screen.blit(square, ((int(tileX) - 1) * twidth + bgx + startposx, (int(tileY) - 1) * theight + bgy + startposy))
+                z += 1
                 break
+    print(z)
 
 
 

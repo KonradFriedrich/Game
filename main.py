@@ -50,6 +50,8 @@ clock = pygame.time.Clock()
 
 bgx = 1200
 bgy = 1200
+cbgx = 0
+cbgy= 0
 
 MapSlicer('img/3kx3k.jpg', 50, 50)
 
@@ -59,7 +61,7 @@ while running:
     #backg = newSprite('img/10x10.png', 1)
     backg = pygame.image.load('img/1000x1000grey.png')
     screen.blit(backg, (0, 0))
-    MapDraw(bgx, bgy, World, viewX, viewY)
+    MapDraw(cbgx, cbgy, World, viewX, viewY)
 
 
 
@@ -71,31 +73,31 @@ while running:
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
                 viewX = -1
-                bgx = 1
+                cbgx = 1
             if event.key == pg.K_RIGHT:
                 viewX = 1
-                bgx = -1
+                cbgx = -1
             if event.key == pg.K_UP:
                 viewY = 1
-                bgy = -1
+                cbgy = -1
             if event.key == pg.K_DOWN:
                 viewY = -1
-                bgy = 1
+                cbgy = 1
 
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:
                 viewX = 1
-                bgx = -1
+                cbgx = -1
             if event.key == pg.K_RIGHT:
                 viewX = -1
-                bgx = 1
+                cbgx = 1
             if event.key == pg.K_UP:
                 viewY = -1
-                bgy = 1
+                cbgy = 1
             if event.key == pg.K_DOWN:
                 viewY = 1
-                bgy = -1
+                cbgy = -1
 
 
 
@@ -151,7 +153,7 @@ while running:
 
     clock.tick()
     fps = clock.get_fps()
-    print(fps)
+    # print(fps)
 
     if playerXhit in enemyXhit and playerYhit in enemyYhit:
         running = False
