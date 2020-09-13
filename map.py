@@ -18,45 +18,38 @@ SeeWorld = []
 
 
 
-startposx = 600
-startposy = 600
 
 # map drawing function
-def MapDraw(cbgx, cbgy, WorldDict, cFX, cFY):
-
-    global FX, FY, bgx, bgy
-
-    # player fov box rounded too hundreds, +100 bcs rounded up
-    # change the ranges so they work!
-    FX += cFX
-    FY += cFY
-
-    bgx += cbgx
-    bgy += cbgy
-
-    #print(FX)
-    #print(bgx)
-
-    PlayerFovX = range(int(math.ceil(FX / 100.0)) * 100, int(math.ceil((FX + screenX + 200) / 100.0)) * 100, 100)
-    PlayerFovY = range(int(math.ceil(FY / 100.0)) * 100, int(math.ceil((FY + screenY + 200) / 100.0)) * 100, 100)
+def MapDraw(bgx, bgy, WorldDict , FX, FY):
+        z = 0
+        # player fov box rounded too hundreds, +100 bcs rounded up
+        # change the ranges so they work!
 
 
-    z = 0
-    # loop through tiles
-    for i in WorldDict:
-        for j in WorldDict[i]["corners"]:
-            if j[0] in PlayerFovY and j[1] in PlayerFovX:
-                tileX = WorldDict[i]["loc"].split("#")[1]
-                tileY = WorldDict[i]["loc"].split("#")[2]
-                square = pygame.image.load(WorldDict[i]["loc"])
+        PlayerFovX = range(int(math.ceil((FX - 200) / 100.0)) * 100, int(math.ceil((FX + screenX + 200) / 100.0)) * 100, 100)
+        PlayerFovY = range(int(math.ceil((FY - 299) / 100.0)) * 100, int(math.ceil((FY + screenY + 200) / 100.0)) * 100, 100)
 
 
-                screen.blit(square, ((int(tileX) - 1) * twidth + bgx + startposx, (int(tileY) - 1) * theight + bgy + startposy))
-                z += 1
-                break
-    print(z)
+
+        # loop through tiles
+        for i in WorldDict:
+            for j in WorldDict[i]["corners"]:
+                if j[0] in PlayerFovY and j[1] in PlayerFovX:
+                    GetX = WorldDict[i]["loc"].split("#")[1]
+                    GetY = WorldDict[i]["loc"].split("#")[2]
+                    square = pygame.image.load(WorldDict[i]["loc"])
+                    #print(bgx)
 
 
+                    #screen.blit(square, ((int(GetX) - 1) * twidth + bgx + startposX, (int(GetY) - 1) * theight + bgy + startposY))
+                    screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
+                    z += 1
+                    break
+        print(z)
+
+
+                    # Maybe faster like this:
+                    # if World[i[j[1]]] in range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100) and World[i[j[2]] in range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100):
 
 
 
@@ -84,6 +77,7 @@ def MapSlicer(Map, screenW, screenH):
     # cutting it small
     for i in range(0, math.ceil(rows)):
         for j in range(0, math.ceil(columns)):
+            # the cutout
             tile = im.crop((i * twidth, j * theight, (i + 1) * twidth, (j + 1) * theight))
             x += 1
             # save the image
