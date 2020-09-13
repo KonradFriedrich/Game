@@ -22,16 +22,15 @@ viewY = 0
 
 
 # draw player
-def playerpos(x, y):
-    screen.blit(playerimg, (x, y))
+
 
 
 # Enemy position
 enemyimg = pg.image.load('img/enemy.png')
 enemyX = random.randint(0, screenX - 32)
-enemyXch = random.randint(-10, 10) / 50000
+enemyXch = 1
 enemyY = random.randint(0, screenY - 32)
-enemyYch = random.randint(-10, 10) / 50000
+enemyYch = 1
 
 
 # draw enemy
@@ -48,7 +47,7 @@ FovY = 0
 
 PMS = 3
 
-MapSlicer('img/10x10.png', 50, 50)
+MapSlicer('img/3kx3k.jpg', 50, 50)
 
 # game loop
 running = True
@@ -94,8 +93,6 @@ while running:
                 viewY += -PMS
                 bgys += PMS
 
-
-    print(viewX)
     bgx = bgxs + bgx
     bgy = bgys + bgy
     FovX = FovX + viewX
@@ -116,14 +113,12 @@ while running:
         playerY = screenY - 32
 
     # change player pos
-    playerY += screenY * playerYch
-    playerX += screenX * playerXch
-    playerpos(int(playerX), int(playerY))
+    screen.blit(playerimg, (screenX / 2, screenY / 2))
 
     # enemy pos
-    enemyX += screenY * enemyXch
-    enemyY += screenX * enemyYch
-    enemypos(int(enemyX), int(enemyY))
+    enemyX += enemyXch
+    enemyY += enemyYch
+    enemypos((enemyX + bgx), (enemyY + bgy))
 
     # border
     if enemyX <= 0:
@@ -141,10 +136,12 @@ while running:
         enemyYch = random.randint(-10, 10) / 50000
 
     # enemy hitbox + checking
-    enemyXhit = range(round(enemyX) - 32, round(enemyX))
-    enemyYhit = range(round(enemyY) - 32, round(enemyY))
-    playerXhit = round(playerX - 16)
-    playerYhit = round(playerY - 16)
+    enemyXhit = range(round(enemyX + bgx) - 32, round(enemyX + bgx))
+    enemyYhit = range(round(enemyY + bgy) - 32, round(enemyY + bgy))
+    playerXhit = round(screenX / 2 - 16 + bgx)
+    playerYhit = round(screenY / 2 - 16 + bgy)
+    print(playerXhit)
+    print(enemyXhit)
 
     clock.tick()
     fps = clock.get_fps()

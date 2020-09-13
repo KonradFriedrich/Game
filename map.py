@@ -22,12 +22,13 @@ SeeWorld = []
 # map drawing function
 def MapDraw(bgx, bgy, WorldDict , FX, FY):
         z = 0
+
+
+
         # player fov box rounded too hundreds, +100 bcs rounded up
         # change the ranges so they work!
-
-
-        PlayerFovX = range(int(math.ceil((FX - 200) / 100.0)) * 100, int(math.ceil((FX + screenX + 200) / 100.0)) * 100, 100)
-        PlayerFovY = range(int(math.ceil((FY - 299) / 100.0)) * 100, int(math.ceil((FY + screenY + 200) / 100.0)) * 100, 100)
+        PlayerFovX = range(int(math.ceil((FX - twidth) / 100.0)) * 100, int(math.ceil((FX + 500 + twidth) / 100.0)) * 100, 100)
+        PlayerFovY = range(int(math.ceil((FY - theight) / 100.0)) * 100, int(math.ceil((FY + 500 + theight) / 100.0)) * 100, 100)
 
 
 
@@ -38,18 +39,13 @@ def MapDraw(bgx, bgy, WorldDict , FX, FY):
                     GetX = WorldDict[i]["loc"].split("#")[1]
                     GetY = WorldDict[i]["loc"].split("#")[2]
                     square = pygame.image.load(WorldDict[i]["loc"])
-                    #print(bgx)
 
 
-                    #screen.blit(square, ((int(GetX) - 1) * twidth + bgx + startposX, (int(GetY) - 1) * theight + bgy + startposY))
                     screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
                     z += 1
                     break
-        print(z)
+        #print(z)
 
-
-                    # Maybe faster like this:
-                    # if World[i[j[1]]] in range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100) and World[i[j[2]] in range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100):
 
 
 
@@ -91,7 +87,6 @@ def MapSlicer(Map, screenW, screenH):
             # create world dict
             World["Tile" + str(x)] = {}
             World["Tile" + str(x)]["loc"] = f"img/tile{x}#{i + 1}#{j + 1}#.png"
-                # ("img/tile-" + x + "-" + str(i) + "#" + str(j) + "-" + ".png")
             World["Tile" + str(x)]["corners"] = [topl, topr, botl, botr]
     print(World)
 

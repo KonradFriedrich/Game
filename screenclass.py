@@ -6,6 +6,7 @@ pg.init()
 # create window
 screenX = 1000
 screenY = 1000
+
 screen = pg.display.set_mode((screenX, screenY))
 
 # title and icon (change later)
