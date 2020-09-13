@@ -21,14 +21,13 @@ SeeWorld = []
 
 # map drawing function
 def MapDraw(bgx, bgy, WorldDict , FX, FY):
-    while True:
         z = 0
         # player fov box rounded too hundreds, +100 bcs rounded up
         # change the ranges so they work!
 
 
-        PlayerFovX = range(int(math.ceil(FX / 100.0)) * 100, int(math.ceil((FX + 1200 + 200) / 100.0)) * 100, 100)
-        PlayerFovY = range(int(math.ceil(FY / 100.0)) * 100, int(math.ceil((FY + 1200 + 200) / 100.0)) * 100, 100)
+        PlayerFovX = range(int(math.ceil((FX - 200) / 100.0)) * 100, int(math.ceil((FX + screenX + 200) / 100.0)) * 100, 100)
+        PlayerFovY = range(int(math.ceil((FY - 299) / 100.0)) * 100, int(math.ceil((FY + screenY + 200) / 100.0)) * 100, 100)
 
 
 
@@ -46,8 +45,7 @@ def MapDraw(bgx, bgy, WorldDict , FX, FY):
                     screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
                     z += 1
                     break
-        #print(z)
-        print(1)
+        print(z)
 
 
                     # Maybe faster like this:

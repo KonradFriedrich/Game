@@ -46,7 +46,9 @@ bgys = 0
 FovX = 0
 FovY = 0
 
-MapSlicer('img/3kx3k.jpg', 50, 50)
+PMS = 3
+
+MapSlicer('img/10x10.png', 50, 50)
 
 # game loop
 running = True
@@ -55,7 +57,8 @@ while running:
     backg = pygame.image.load('img/1000x1000grey.png')
     screen.blit(backg, (0, 0))
     MapDraw(bgx, bgy, World, FovX, FovY)
-    print(bgx)
+
+
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -64,32 +67,32 @@ while running:
         # movement x-y axis
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
-                viewX += -1
-                bgxs += 1
+                viewX += -PMS
+                bgxs += PMS
             if event.key == pg.K_RIGHT:
-                viewX += 1
-                bgxs += -1
+                viewX += PMS
+                bgxs += -PMS
             if event.key == pg.K_UP:
-                viewY += -1
-                bgys += 1
+                viewY += -PMS
+                bgys += PMS
             if event.key == pg.K_DOWN:
-                viewY += 1
-                bgys += -1
+                viewY += PMS
+                bgys += -PMS
 
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:
-                viewX = 1
-                bgxs += -1
+                viewX = PMS
+                bgxs += -PMS
             if event.key == pg.K_RIGHT:
-                viewX = -1
-                bgxs += 1
+                viewX = -PMS
+                bgxs += PMS
             if event.key == pg.K_UP:
-                viewY += 1
-                bgys += -1
+                viewY += PMS
+                bgys += -PMS
             if event.key == pg.K_DOWN:
-                viewY += -1
-                bgys += 1
+                viewY += -PMS
+                bgys += PMS
 
     bgx = bgxs + bgx
     bgy = bgys + bgy
@@ -143,7 +146,7 @@ while running:
 
     clock.tick()
     fps = clock.get_fps()
-    print(fps)
+    #print(fps)
 
     if playerXhit in enemyXhit and playerYhit in enemyYhit:
         running = False
