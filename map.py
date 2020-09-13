@@ -20,13 +20,15 @@ SeeWorld = []
 
 
 # map drawing function
-def MapDraw(bgx, bgy, WorldDict):
+def MapDraw(bgx, bgy, WorldDict, FX, FY):
 
 
     # player fov box rounded too hundreds, +100 bcs rounded up
     # change the ranges so they work!
-    PlayerFovX = range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100)
-    PlayerFovY = range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100)
+    RFX += FX
+    RFY += FY
+    PlayerFovX = range(int(math.ceil((RFX - screenX - 100) / 100.0)) * 100, int(math.ceil(RFX / 100.0)) * 100, 100)
+    PlayerFovY = range(int(math.ceil((RFY - screenX - 100) / 100.0)) * 100, int(math.ceil(RFY / 100.0)) * 100, 100)
 
 
 
@@ -34,17 +36,15 @@ def MapDraw(bgx, bgy, WorldDict):
     for i in WorldDict:
         for j in WorldDict[i]["corners"]:
             if j[0] in PlayerFovY and j[1] in PlayerFovX:
-                GetX = WorldDict[i]["loc"].split("#")[1]
-                GetY = WorldDict[i]["loc"].split("#")[2]
+                tileX = WorldDict[i]["loc"].split("#")[1]
+                tileY = WorldDict[i]["loc"].split("#")[2]
                 square = pygame.image.load(WorldDict[i]["loc"])
 
 
-                screen.blit(square, ((int(GetX) - 1) * twidth, (int(GetY) - 1) * theight))
+                screen.blit(square, ((int(tileX) - 1) * twidth + bgx, (int(tileY) - 1) * theight + bgy))
                 break
 
 
-                # Maybe faster like this:
-                # if World[i[j[1]]] in range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100) and World[i[j[2]] in range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100):
 
 
 
