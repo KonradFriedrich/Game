@@ -20,49 +20,38 @@ SeeWorld = []
 
 
 # map drawing function
-def MapDraw(bgx, bgy, WorldDict):
-
-    z = 0
-
-    # player fov box rounded too hundreds, +100 bcs rounded up
-    # change the ranges so they work!
-
+def MapDraw(bgx, bgy, WorldDict , FX, FY):
+    while True:
+        z = 0
+        # player fov box rounded too hundreds, +100 bcs rounded up
+        # change the ranges so they work!
 
 
-
-    PlayerFovX = range(int(math.ceil(bgx / 100.0)) * 100, int(math.ceil((bgx + 600 + 200) / 100.0)) * 100, 100)
-    #PlayerFovX = range(int(math.ceil(bgx / 100.0)) * 100, int(math.ceil((bgx + 600 + 100) / 100.0)) * 100, 100)
-    PlayerFovY = range(int(math.ceil(bgy / 100.0)) * 100, int(math.ceil((bgy + 600 + 200) / 100.0)) * 100, 100)
-    #PlayerFovY = range(int(math.ceil(bgy / 100.0)) * 100, int(math.ceil((bgy + 600 + 100) / 100.0)) * 100, 100)
-    #print(bgx)
-
-    print(PlayerFovX)
-    print(PlayerFovY)
-
-    #rbgy = math.ceil(bgy / 100) * 100
-    #rbgx = math.ceil(bgx / 100) * 100
-    rbgy = 0
-    rbgx = 0
-
-    # loop through tiles
-    for i in WorldDict:
-        for j in WorldDict[i]["corners"]:
-            if (j[0] + rbgy) in PlayerFovY and (j[1] + rbgx) in PlayerFovX:
-                GetX = WorldDict[i]["loc"].split("#")[1]
-                GetY = WorldDict[i]["loc"].split("#")[2]
-                square = pygame.image.load(WorldDict[i]["loc"])
-                #print(bgx)
+        PlayerFovX = range(int(math.ceil(FX / 100.0)) * 100, int(math.ceil((FX + 1200 + 200) / 100.0)) * 100, 100)
+        PlayerFovY = range(int(math.ceil(FY / 100.0)) * 100, int(math.ceil((FY + 1200 + 200) / 100.0)) * 100, 100)
 
 
-                #screen.blit(square, ((int(GetX) - 1) * twidth + bgx + startposX, (int(GetY) - 1) * theight + bgy + startposY))
-                screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
-                z += 1
-                break
-    print(z)
+
+        # loop through tiles
+        for i in WorldDict:
+            for j in WorldDict[i]["corners"]:
+                if j[0] in PlayerFovY and j[1] in PlayerFovX:
+                    GetX = WorldDict[i]["loc"].split("#")[1]
+                    GetY = WorldDict[i]["loc"].split("#")[2]
+                    square = pygame.image.load(WorldDict[i]["loc"])
+                    #print(bgx)
 
 
-                # Maybe faster like this:
-                # if World[i[j[1]]] in range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100) and World[i[j[2]] in range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100):
+                    #screen.blit(square, ((int(GetX) - 1) * twidth + bgx + startposX, (int(GetY) - 1) * theight + bgy + startposY))
+                    screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
+                    z += 1
+                    break
+        #print(z)
+        print(1)
+
+
+                    # Maybe faster like this:
+                    # if World[i[j[1]]] in range(int(math.ceil((bgx - screenX - 100) / 100.0)) * 100, int(math.ceil(bgx / 100.0)) * 100, 100) and World[i[j[2]] in range(int(math.ceil((bgy - screenX - 100) / 100.0)) * 100, int(math.ceil(bgy / 100.0)) * 100, 100):
 
 
 
