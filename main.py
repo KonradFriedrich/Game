@@ -82,10 +82,10 @@ while running:
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:
-                viewX = PMS
+                viewX += PMS
                 bgxs += -PMS
             if event.key == pg.K_RIGHT:
-                viewX = -PMS
+                viewX += -PMS
                 bgxs += PMS
             if event.key == pg.K_UP:
                 viewY += PMS
@@ -94,6 +94,8 @@ while running:
                 viewY += -PMS
                 bgys += PMS
 
+
+    print(viewX)
     bgx = bgxs + bgx
     bgy = bgys + bgy
     FovX = FovX + viewX
