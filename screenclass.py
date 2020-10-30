@@ -15,5 +15,5 @@ icon = pg.image.load('img/knight.png')
 pg.display.set_icon(icon)
 bgx = 0
 bgy = 0
-startposX = 0
-startposY = 0
+startposX = -200
+startposY = -200

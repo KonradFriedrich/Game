@@ -52,10 +52,9 @@ MapSlicer('img/3kx3k.jpg', 50, 50)
 # game loop
 running = True
 while running:
-    # backg = newSprite('img/10x10.png', 1)
     backg = pygame.image.load('img/1000x1000grey.png')
     screen.blit(backg, (0, 0))
-    MapDraw(bgx, bgy, World, FovX, FovY)
+    MapDraw(bgx, bgy)
 
 
 
@@ -98,8 +97,6 @@ while running:
     FovX = FovX + viewX
     FovY = FovY + viewY
 
-    # background movement (scrollable background)
-    # def Scroll(sx, sy):
 
     # x borders
     if playerX <= 0:
@@ -140,8 +137,8 @@ while running:
     enemyYhit = range(round(enemyY + bgy) - 32, round(enemyY + bgy))
     playerXhit = round(screenX / 2 - 16 + bgx)
     playerYhit = round(screenY / 2 - 16 + bgy)
-    print(playerXhit)
-    print(enemyXhit)
+    #print(playerXhit)
+    #print(enemyXhit)
 
     clock.tick()
     fps = clock.get_fps()

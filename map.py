@@ -10,46 +10,6 @@ pygame.init
 global \
     twidth, theight
 
-World = {}
-SeeWorld = []
-
-
-
-
-
-
-
-# map drawing function
-def MapDraw(bgx, bgy, WorldDict , FX, FY):
-        z = 0
-
-
-
-        # player fov box rounded too hundreds, +100 bcs rounded up
-        # change the ranges so they work!
-        PlayerFovX = range(int(math.ceil((FX - twidth) / 100.0)) * 100, int(math.ceil((FX + 500 + twidth) / 100.0)) * 100, 100)
-        PlayerFovY = range(int(math.ceil((FY - theight) / 100.0)) * 100, int(math.ceil((FY + 500 + theight) / 100.0)) * 100, 100)
-
-
-
-        # loop through tiles
-        for i in WorldDict:
-            for j in WorldDict[i]["corners"]:
-                if j[0] in PlayerFovY and j[1] in PlayerFovX:
-                    GetX = WorldDict[i]["loc"].split("#")[1]
-                    GetY = WorldDict[i]["loc"].split("#")[2]
-                    square = pygame.image.load(WorldDict[i]["loc"])
-
-
-                    screen.blit(square, (int(GetX) * twidth + bgx + startposX, int(GetY) * theight + bgy + startposY))
-                    z += 1
-                    break
-        #print(z)
-
-
-
-
-
 
 
 
@@ -77,18 +37,34 @@ def MapSlicer(Map, screenW, screenH):
             tile = im.crop((i * twidth, j * theight, (i + 1) * twidth, (j + 1) * theight))
             x += 1
             # save the image
-            tile.save(f"img/tile{x}#{i + 1}#{j + 1}#.png")
-            # tile corners for loading points (and round up to hundreds for easier calc)
-            topl = [int(math.ceil(twidth * j / 100.0)) * 100, int(math.ceil(theight * i / 100.0)) * 100]
-            topr = [int(math.ceil(twidth * (j + 1) / 100.0)) * 100, int(math.ceil(theight * i / 100.0)) * 100]
-            botl = [int(math.ceil(twidth * j / 100.0)) * 100, int(math.ceil(theight * (i + 1) / 100.0)) * 100]
-            botr = [int(math.ceil(twidth * (j + 1) / 100.0)) * 100, int(math.ceil(theight * (i + 1) / 100.0)) * 100]
+            tile.save(f"img/tile#{i + 1}#{j + 1}#.png")
 
-            # create world dict
-            World["Tile" + str(x)] = {}
-            World["Tile" + str(x)]["loc"] = f"img/tile{x}#{i + 1}#{j + 1}#.png"
-            World["Tile" + str(x)]["corners"] = [topl, topr, botl, botr]
-    print(World)
+
+    global RENDERX, RENDERY
+    RENDERX = math.ceil(screenX / twidth) + 1
+    RENDERY = math.ceil(screenY / theight) + 1
+
+
+
+
+
+
+def MapDraw(bgx, bgy):
+
+    # get the upper left tile
+    xfirst = math.trunc(abs((bgx + startposX) / twidth))
+    yfirst = math.trunc(abs((bgy + startposY) / theight))
+
+    # draw enough adjacent tiles to fill screen
+    for i in range(0, RENDERX):
+        for j in range(0, RENDERY):
+
+            # check if the tile exists
+            if xfirst + i > 0 and yfirst + j > 0:
+
+                # draw the tile
+                square = pygame.image.load(f"img/tile#{xfirst + i}#{yfirst + j}#.png")
+                screen.blit(square, (int(xfirst + i) * twidth + bgx + startposX, int(yfirst + j) * theight + bgy + startposY))
 
 
 
