@@ -42,8 +42,7 @@ clock = pygame.time.Clock()
 
 bgxs = 0
 bgys = 0
-FovX = 0
-FovY = 0
+
 
 PMS = 3
 
@@ -65,49 +64,31 @@ while running:
         # movement x-y axis
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
-                viewX += -PMS
                 bgxs += PMS
             if event.key == pg.K_RIGHT:
-                viewX += PMS
                 bgxs += -PMS
             if event.key == pg.K_UP:
-                viewY += -PMS
                 bgys += PMS
             if event.key == pg.K_DOWN:
-                viewY += PMS
                 bgys += -PMS
 
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:
-                viewX += PMS
                 bgxs += -PMS
             if event.key == pg.K_RIGHT:
-                viewX += -PMS
                 bgxs += PMS
             if event.key == pg.K_UP:
-                viewY += PMS
                 bgys += -PMS
             if event.key == pg.K_DOWN:
-                viewY += -PMS
                 bgys += PMS
 
     bgx = bgxs + bgx
     bgy = bgys + bgy
-    FovX = FovX + viewX
-    FovY = FovY + viewY
 
 
-    # x borders
-    if playerX <= 0:
-        playerX = 0
-    elif playerX >= screenX - 32:
-        playerX = screenX - 32
-    # y borders
-    if playerY <= 0:
-        playerY = 0
-    elif playerY >= screenY - 32:
-        playerY = screenY - 32
+    BorderCheck(bgx, bgy)
+
 
     # change player pos
     screen.blit(playerimg, (screenX / 2, screenY / 2))
@@ -117,35 +98,12 @@ while running:
     enemyY += enemyYch
     enemypos((enemyX + bgx), (enemyY + bgy))
 
-    # border
-    if enemyX <= 0:
-        enemyX = 0
-        enemyXch = random.randint(-10, 10) / 50000
-    elif enemyX >= screenX - 32:
-        enemyX = screenX - 32
-        enemyXch = random.randint(-10, 10) / 50000
-    # y borders
-    if enemyY <= 0:
-        enemyY = 0
-        enemyYch = random.randint(-10, 10) / 50000
-    elif enemyY >= screenY - 32:
-        enemyY = screenY - 32
-        enemyYch = random.randint(-10, 10) / 50000
 
-    # enemy hitbox + checking
-    enemyXhit = range(round(enemyX + bgx) - 32, round(enemyX + bgx))
-    enemyYhit = range(round(enemyY + bgy) - 32, round(enemyY + bgy))
-    playerXhit = round(screenX / 2 - 16 + bgx)
-    playerYhit = round(screenY / 2 - 16 + bgy)
-    #print(playerXhit)
-    #print(enemyXhit)
 
     clock.tick()
     fps = clock.get_fps()
     #print(fps)
 
-    if playerXhit in enemyXhit and playerYhit in enemyYhit:
-        running = False
 
     # screeenupdate
     pg.display.update()
