@@ -1,5 +1,5 @@
 from PIL import Image
-from screenclass import *
+from StartData import *
 import math
 import pygame
 
@@ -20,16 +20,19 @@ def BorderCheck(bgxb, bgyb):
     playerx = -bgxb + screenX / 2
     playery = -bgyb + screenY / 2
 
-    if playerx <= -STARTPOSX:
-        bgxb = 0
+    if playerx <= - 100 - STARTPOSX:
+        bgxb = -STARTPOSX
     if playery <= -STARTPOSY:
-        bgyb = 0
+        bgyb = - STARTPOSY
     if playerx >= imgwidth - STARTPOSX:
         bgxb = imgwidth
     if playery >= imgheight - STARTPOSY:
         bgyb = imgheight
 
     print(bgxb, playerx)
+
+
+
     return bgxb, bgyb
     #item borders
 
@@ -82,11 +85,9 @@ def MapDraw(bgx, bgy):
         for j in range(0, RENDERY):
 
             # check if the tile exists
-            if xfirst + i > 0 and yfirst + j > 0 and xfirst + i <= RENDERY and yfirst + j < RENDERX:
+            if xfirst + i > 0 and yfirst + j > 0:
+            # if xfirst + i > 0 and yfirst + j > 0 and xfirst + i <= RENDERY and yfirst + j < RENDERX: this is bugfix but not working
 
                 # draw the tile
                 square = pygame.image.load(f"img/tile#{xfirst + i}#{yfirst + j}#.png")
                 screen.blit(square, (int(xfirst + i) * twidth + bgx, int(yfirst + j) * theight + bgy))
-
-
-

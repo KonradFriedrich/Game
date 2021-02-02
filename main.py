@@ -3,7 +3,7 @@ import random
 # from map import *
 # import threading
 from map import *
-from screenclass import *
+from StartData import *
 
 global \
     bgx, bgy, screen, FovX, FovY
@@ -11,26 +11,10 @@ global \
 # init pg
 pg.init()
 
-# Player position
-playerimg = pg.image.load('img/knight.png')
-playerX = 384
-playerXch = 0
-playerY = 480
-playerYch = 0
-viewX = 0
-viewY = 0
 
+obstacles = pg.sprite.Group()
 
-# draw player
-
-
-
-# Enemy position
-enemyimg = pg.image.load('img/enemy.png')
-enemyX = random.randint(0, screenX - 32)
-enemyXch = 1
-enemyY = random.randint(0, screenY - 32)
-enemyYch = 1
+pg.sprite.spritecollide()
 
 
 # draw enemy
@@ -86,8 +70,7 @@ while running:
     bgx = bgxs + bgx
     bgy = bgys + bgy
 
-
-    BorderCheck(bgx, bgy)
+    bgx, bgy = BorderCheck(bgx, bgy)
 
 
     # change player pos
