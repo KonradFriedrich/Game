@@ -14,12 +14,12 @@ pg.init()
 
 obstacles = pg.sprite.Group()
 
-pg.sprite.spritecollide()
+#pg.sprite.spritecollide()
+
+
 
 
 # draw enemy
-def enemypos(x, y):
-    screen.blit(enemyimg, (x, y))
 
 
 clock = pygame.time.Clock()
@@ -30,14 +30,26 @@ bgys = 0
 
 PMS = 3
 
-MapSlicer('img/3kx3k.jpg', 50, 50)
+MapSlicer('img/DUNGEON.png', 50, 50)
+
+framecounter = pygame.time.get_ticks()
+ultimateframe = 0
+
+playerstance = "e"
 
 # game loop
 running = True
 while running:
-    backg = pygame.image.load('img/1000x1000grey.png')
+    if pygame.time.get_ticks() > framecounter:
+        ultimateframe = (1 + ultimateframe) % 12
+        framecounter += 80
+    #print(ultimateframe)
+
+
+    backg = pygame.image.load('img/1024Black.png')
     screen.blit(backg, (0, 0))
     MapDraw(bgx, bgy)
+
 
 
 
@@ -49,12 +61,16 @@ while running:
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
                 bgxs += PMS
+                playerstance = "w"
             if event.key == pg.K_RIGHT:
                 bgxs += -PMS
+                playerstance = "e"
             if event.key == pg.K_UP:
                 bgys += PMS
+                #playerstance = "n"
             if event.key == pg.K_DOWN:
                 bgys += -PMS
+                #playerstance = "s"
 
         # movement stop
         if event.type == pg.KEYUP:
@@ -74,12 +90,15 @@ while running:
 
 
     # change player pos
-    screen.blit(playerimg, (screenX / 2, screenY / 2))
+    #screen.blit(player.img[ultimateframe], (screenX / 2, screenY / 2))
+    if pg.key.get_pressed() == (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0):
+        playerstance = "idle"
+    player.move(screenX / 2, screenY / 2, playerstance, ultimateframe)
 
     # enemy pos
-    enemyX += enemyXch
-    enemyY += enemyYch
-    enemypos((enemyX + bgx), (enemyY + bgy))
+    enemy.enemyX += enemy.enemyXch
+    enemy.enemyY += enemy.enemyYch
+    enemy.enemypos((enemy.enemyX + bgx), (enemy.enemyY + bgy), ultimateframe)
 
 
 
