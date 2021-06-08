@@ -1,7 +1,5 @@
 import pygame as pg
 import random
-# from map import *
-# import threading
 from map import *
 from StartData import *
 
@@ -18,11 +16,10 @@ obstacles = pg.sprite.Group()
 
 
 
-
 # draw enemy
 
 
-clock = pygame.time.Clock()
+clock = pg.time.Clock()
 
 bgxs = 0
 bgys = 0
@@ -30,7 +27,7 @@ bgys = 0
 
 PMS = 3
 
-MapSlicer('img/DUNGEON.png', 50, 50)
+MapSlicer('img/2xDungeon.png', 50, 50)
 
 framecounter = pygame.time.get_ticks()
 ultimateframe = 0
@@ -91,14 +88,20 @@ while running:
 
     # change player pos
     #screen.blit(player.img[ultimateframe], (screenX / 2, screenY / 2))
-    if pg.key.get_pressed() == (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0):
-        playerstance = "idle"
+
     player.move(screenX / 2, screenY / 2, playerstance, ultimateframe)
+    player.detectdamage(bgx, bgy)
 
     # enemy pos
+    if enemy.enemyX > 520:
+        enemy.enemyXch = -1
+    elif enemy.enemyX < 420:
+        enemy.enemyXch = 1
     enemy.enemyX += enemy.enemyXch
-    enemy.enemyY += enemy.enemyYch
-    enemy.enemypos((enemy.enemyX + bgx), (enemy.enemyY + bgy), ultimateframe)
+    if enemy.enemyXch == -1:
+        enemy.enemypos((enemy.enemyX + bgx), (enemy.enemyY + bgy), ultimateframe + 12)
+    else:
+        enemy.enemypos((enemy.enemyX + bgx), (enemy.enemyY + bgy), ultimateframe)
 
 
 

@@ -3,6 +3,7 @@ from StartData import *
 import math
 import pygame
 
+
 # this has the functons which cuts, draws and only draw special tiles of the map
 
 pygame.init
