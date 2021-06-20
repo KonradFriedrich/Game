@@ -69,6 +69,8 @@ while running:
                 bgys += -PMS
                 #playerstance = "s"
 
+        player.move(bgxs, bgys, playerstance, ultimateframe)
+
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:

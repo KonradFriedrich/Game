@@ -68,40 +68,9 @@ class Playerob(pg.sprite.Sprite):
 
     def move(self, x, y, direction, frame):
         # direction = north east south west / n,e,s,w so at least 4x8 frames needed
-        if pg.sprite.collide_rect(player, obstacle):
 
 
-
-
-        if self.rect > obst[0] or self.rect < obst[2]:
-            print("is intersecting in x")
-            # see which side is closer to rectmid
-            # closer to left than right
-            if abs(obst[0] - rectmid[0]) >= abs(obst[2] - rectmid[0]):
-                print("left")
-                rect[0] = rect[0] + obstx
-                rect[2] = rect[2] + obstx
-            else:
-                print("right")
-                rect[0] = rect[0] - obstx
-                rect[2] = rect[2] - obstx
-
-        if rect[1] > obst[1] or rect[3] < obst[3]:
-            print("is intersecting in x")
-            if abs(obst[1] - rectmid[0]) >= abs(obst[3] - rectmid[0]):
-                print("top")
-                rect[1] = rect[1] + obsty
-                rect[3] = rect[3] + obsty
-            else:
-                print("bottom")
-                rect[1] = rect[1] - obsty
-                rect[3] = rect[3] - obsty
-        return rect
-
-
-
-
-
+        # animation
         if direction == "n":
             screen.blit(self.img[12 * 0 + frame], (x, y))
         elif direction == "e":
@@ -112,6 +81,28 @@ class Playerob(pg.sprite.Sprite):
             screen.blit(self.img[12 * 1 + frame], (x, y))
         elif direction == "idle":
             screen.blit(self.img[12 * 2 + frame], (x, y))
+
+
+        # obstacle blocking
+        if pg.sprite.collide_rect(self, obstacles):
+            obstacle = self.rect.collidelistall(obstacles) #fill in whats obstacle probably will create list
+            for i in obstacle:
+                # over x
+                if self.rect.centery >= obstacle[i].rect.centery:
+                    #may need to change to obstacle[i].rect.midtop[1]
+                    y = obstacle[i].rect.midtopy
+                else:
+                    y = obstacle[i].rect.midbottomy
+                if self.rect.centerx >= obstacle[i].rect.centerx:
+                    # may need to change to obstacle[i].rect.midtop[0]
+                    y = obstacle[i].rect.midleftx
+                else:
+                    y = obstacle[i].rect.midrightx
+
+        #dont fuckin g move the rect move the map!!!!!!!!!!!!!!!!!!!!!!!!! change this later!!!!!!!!!!
+        #change bg x/y not player rect!!!!
+        self.rect.move(x, y)
+
 
 
 
