@@ -44,6 +44,7 @@ class Playerob(pg.sprite.Sprite):
         self.playerHp = 3
         self.playerEffect = []
         self.invincible = pg.time.Clock()
+        self.rect = pg.rect
 
 
     def animationspliter(self, image, frames = 1):
@@ -66,8 +67,10 @@ class Playerob(pg.sprite.Sprite):
         self.currentimage = self.img[0]
         self.imgrect = addframe.get_rect()
 
-    def move(self, x, y, direction, frame):
+
+    def move(self,x, y, direction, frame, bgx, bgy):
         # direction = north east south west / n,e,s,w so at least 4x8 frames needed
+        self.rect = self.imgrect.move(screenX/2 - bgx, screenY/2 - bgy)
 
 
         # animation
@@ -83,10 +86,14 @@ class Playerob(pg.sprite.Sprite):
             screen.blit(self.img[12 * 2 + frame], (x, y))
 
 
+
         # obstacle blocking
-        if pg.sprite.collide_rect(self, obstacles):
-            obstacle = self.rect.collidelistall(obstacles) #fill in whats obstacle probably will create list
+        #print(pg.sprite.spritecollide(self, enemies_group, False))
+        if pg.sprite.collide_rect(player, enemy):
+            print("a")
+            obstacle = pg.sprite.spritecollide(self, obstacles) #fill in whats obstacle probably will create list
             for i in obstacle:
+                print(obstacles)
                 # over x
                 if self.rect.centery >= obstacle[i].rect.centery:
                     #may need to change to obstacle[i].rect.midtop[1]
@@ -116,7 +123,8 @@ class Playerob(pg.sprite.Sprite):
         #print(self.playerHp)
         if pg.sprite.collide_rect(player, enemy):
             self.invincible.tick()
-        print(self.invincible.get_time)
+            #print("b")
+        #print(self.invincible.get_time)
             #if self.invincible.get_time >= 1.5:
                 #self.playerHp = self.playerHp - 1
             #print(pg.sprite.spritecollide(player, enemies_group, False))
@@ -211,4 +219,4 @@ enemies_group = pg.sprite.Group()
 enemies_group.add(enemy)
 
 obstacles = pg.sprite.Group()
-enemies_group.add(enemy)
+obstacles.add(enemy)

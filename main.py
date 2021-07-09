@@ -69,7 +69,7 @@ while running:
                 bgys += -PMS
                 #playerstance = "s"
 
-        player.move(bgxs, bgys, playerstance, ultimateframe)
+        player.move(bgxs, bgys, playerstance, ultimateframe, bgx, bgy)
 
         # movement stop
         if event.type == pg.KEYUP:
@@ -84,6 +84,7 @@ while running:
 
     bgx = bgxs + bgx
     bgy = bgys + bgy
+
 
     bgx, bgy = BorderCheck(bgx, bgy)
 
