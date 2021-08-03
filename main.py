@@ -1,10 +1,10 @@
 import pygame as pg
 import random
 from map import *
-from StartData import *
+import StartData
 
 global \
-    bgx, bgy, screen, FovX, FovY
+        screen, FovX, FovY
 
 # init pg
 pg.init()
@@ -69,7 +69,7 @@ while running:
                 bgys += -PMS
                 #playerstance = "s"
 
-        player.move(bgxs, bgys, playerstance, ultimateframe, bgx, bgy)
+
 
         # movement stop
         if event.type == pg.KEYUP:
@@ -82,17 +82,17 @@ while running:
             if event.key == pg.K_DOWN:
                 bgys += PMS
 
-    bgx = bgxs + bgx
-    bgy = bgys + bgy
+    StartData.bgx = bgxs + StartData.bgx
+    StartData.bgy = bgys + StartData.bgy
 
 
-    bgx, bgy = BorderCheck(bgx, bgy)
+    StartData.bgx, StartData.bgy = BorderCheck(StartData.bgx, StartData.bgy)
 
-
+    player.move(bgxs, bgys, playerstance, ultimateframe)
+    print(StartData.bgx)
     # change player pos
     #screen.blit(player.img[ultimateframe], (screenX / 2, screenY / 2))
 
-    player.move(screenX / 2, screenY / 2, playerstance, ultimateframe)
     player.detectdamage(bgx, bgy)
 
     # enemy pos

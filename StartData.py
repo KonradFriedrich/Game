@@ -68,22 +68,22 @@ class Playerob(pg.sprite.Sprite):
         self.imgrect = addframe.get_rect()
 
 
-    def move(self,x, y, direction, frame, bgx, bgy):
+    def move(self,x, y, direction, frame):
         # direction = north east south west / n,e,s,w so at least 4x8 frames needed
-        self.rect = self.imgrect.move(screenX/2 - bgx, screenY/2 - bgy)
+        self.rect = self.imgrect.move(screenX/2, screenY/2)
 
-
+        print(bgx)
         # animation
         if direction == "n":
-            screen.blit(self.img[12 * 0 + frame], (x, y))
+            screen.blit(self.img[12 * 0 + frame], (screenX/2, screenY/2))
         elif direction == "e":
-            screen.blit(self.img[12 * 0 + frame], (x, y))
+            screen.blit(self.img[12 * 0 + frame], (screenX/2, screenY/2))
         elif direction == "s":
-            screen.blit(self.img[12 * 1 + frame], (x, y))
+            screen.blit(self.img[12 * 1 + frame], (screenX/2, screenY/2))
         elif direction == "w":
-            screen.blit(self.img[12 * 1 + frame], (x, y))
+            screen.blit(self.img[12 * 1 + frame], (screenX/2, screenY/2))
         elif direction == "idle":
-            screen.blit(self.img[12 * 2 + frame], (x, y))
+            screen.blit(self.img[12 * 2 + frame], (screenX/2, screenY/2))
 
 
 
@@ -91,20 +91,20 @@ class Playerob(pg.sprite.Sprite):
         #print(pg.sprite.spritecollide(self, enemies_group, False))
         if pg.sprite.collide_rect(player, enemy):
             print("a")
-            obstacle = pg.sprite.spritecollide(self, obstacles) #fill in whats obstacle probably will create list
+            obstacle = pg.sprite.spritecollide(self, obstacles, False) #fill in whats obstacle probably will create list
             for i in obstacle:
                 print(obstacles)
                 # over x
-                if self.rect.centery >= obstacle[i].rect.centery:
+                if self.rect.centery >= obstacle[0].rect.centery:
                     #may need to change to obstacle[i].rect.midtop[1]
-                    y = obstacle[i].rect.midtopy
+                    y = obstacle[0].rect.midtop[1]
                 else:
-                    y = obstacle[i].rect.midbottomy
-                if self.rect.centerx >= obstacle[i].rect.centerx:
+                    y = obstacle[0].rect.midbottom[1]
+                if self.rect.centerx >= obstacle[0].rect.centerx:
                     # may need to change to obstacle[i].rect.midtop[0]
-                    y = obstacle[i].rect.midleftx
+                    x = obstacle[0].rect.midleft[0]
                 else:
-                    y = obstacle[i].rect.midrightx
+                    x = obstacle[0].rect.midright[0]
 
         #dont fuckin g move the rect move the map!!!!!!!!!!!!!!!!!!!!!!!!! change this later!!!!!!!!!!
         #change bg x/y not player rect!!!!
