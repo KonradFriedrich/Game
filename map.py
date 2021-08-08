@@ -1,5 +1,5 @@
 from PIL import Image
-from StartData import *
+import StartData as SD
 import math
 import pygame
 
@@ -15,22 +15,19 @@ global \
 
 
 
-def BorderCheck(bgxb, bgyb):
+def BorderCheck():
     #map borders
 
-    if bgxb >= -STARTPOSX:
-        bgxb = -STARTPOSX
-    if bgyb >= -STARTPOSY:
-        bgyb = -STARTPOSY
-    if bgxb <= -imgwidth:
-        bgxb = -imgwidth
-    if bgyb <= -imgheight:
-        bgyb = -imgheight
+    if SD.bgx >= -SD.STARTPOSX:
+        SD.bgx = -SD.STARTPOSX
+    if SD.bgy >= -SD.STARTPOSY:
+        SD.bgy = -SD.STARTPOSY
+    if SD.bgx <= -imgwidth:
+        SD.bgx = -imgwidth
+    if SD.bgy <= -imgheight:
+        SD.bgy = -imgheight
 
 
-    #print(bgxb, -imgwidth)
-
-    return bgxb, bgyb
     #item borders
 
 
@@ -62,8 +59,8 @@ def MapSlicer(Map, screenW, screenH):
             # save the image
             tile.save(f"img/tile#{i + 1}#{j + 1}#.png")
 
-    RENDERX = math.ceil(screenX / twidth) + 1
-    RENDERY = math.ceil(screenY / twidth) + 1
+    RENDERX = math.ceil(SD.screenX / twidth) + 1
+    RENDERY = math.ceil(SD.screenY / twidth) + 1
     ENDX = i
     ENDY = j
 
@@ -71,11 +68,11 @@ def MapSlicer(Map, screenW, screenH):
 
 
 
-def MapDraw(bgx, bgy):
+def MapDraw():
 
     # get the upper left tile
-    xfirst = math.trunc(abs((bgx) / twidth))
-    yfirst = math.trunc(abs((bgy) / theight))
+    xfirst = math.trunc(abs((SD.bgx) / twidth))
+    yfirst = math.trunc(abs((SD.bgy) / theight))
 
 
     # draw enough adjacent tiles to fill screen
@@ -85,4 +82,4 @@ def MapDraw(bgx, bgy):
             if xfirst + i > 0 and yfirst + j > 0 and xfirst + i <= ENDX and yfirst + j <= ENDY:
                 # draw the tile
                 square = pygame.image.load(f"img/tile#{xfirst + i}#{yfirst + j}#.png")
-                screen.blit(square, (int(xfirst + i) * twidth + bgx, int(yfirst + j) * theight + bgy))
+                SD.screen.blit(square, (int(xfirst + i) * twidth + SD.bgx, int(yfirst + j) * theight + SD.bgy))

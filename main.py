@@ -1,8 +1,8 @@
 import pygame as pg
 import random
+from StartData import *
+import StartData as SD
 from map import *
-import StartData
-
 global \
         screen, FovX, FovY
 
@@ -43,9 +43,11 @@ while running:
     #print(ultimateframe)
 
 
+
     backg = pygame.image.load('img/1024Black.png')
     screen.blit(backg, (0, 0))
-    MapDraw(bgx, bgy)
+    MapDraw()
+
 
 
 
@@ -82,36 +84,30 @@ while running:
             if event.key == pg.K_DOWN:
                 bgys += PMS
 
-    StartData.bgx = bgxs + StartData.bgx
-    StartData.bgy = bgys + StartData.bgy
-
-
-    StartData.bgx, StartData.bgy = BorderCheck(StartData.bgx, StartData.bgy)
-
     player.move(bgxs, bgys, playerstance, ultimateframe)
-    print(StartData.bgx)
+
+
+
+
+
+    BorderCheck()
+
+
+
+
     # change player pos
     #screen.blit(player.img[ultimateframe], (screenX / 2, screenY / 2))
 
-    player.detectdamage(bgx, bgy)
+    player.detectdamage()
 
     # enemy pos
-    if enemy.enemyX > 520:
-        enemy.enemyXch = -1
-    elif enemy.enemyX < 420:
-        enemy.enemyXch = 1
-    enemy.enemyX += enemy.enemyXch
-    if enemy.enemyXch == -1:
-        enemy.enemypos((enemy.enemyX + bgx), (enemy.enemyY + bgy), ultimateframe + 12)
-    else:
-        enemy.enemypos((enemy.enemyX + bgx), (enemy.enemyY + bgy), ultimateframe)
+    SD.enemy.enemypos(ultimateframe)
+
 
 
 
     clock.tick()
     fps = clock.get_fps()
-    #print(fps)
-
 
     # screeenupdate
     pg.display.update()

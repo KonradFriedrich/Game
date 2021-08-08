@@ -6,6 +6,13 @@ import os, sys
 
 pg.init()
 
+STARTPOSX = -300
+STARTPOSY = -300
+
+
+bgx = STARTPOSX
+bgy = STARTPOSY
+
 # create window
 screenX = 1000
 screenY = 1000
@@ -16,10 +23,6 @@ screen = pg.display.set_mode((screenX, screenY))
 pg.display.set_caption("Hack and Slay")
 icon = pg.image.load('img/knight.png')
 pg.display.set_icon(icon)
-STARTPOSX = -300
-STARTPOSY = -300
-bgx = STARTPOSX
-bgy = STARTPOSY
 
 
 
@@ -30,6 +33,14 @@ basicmonster = ['img/enemy.png']
 obstruction = pg.sprite.Group()
 enattack = pg.sprite.Group()
 plattack = pg.sprite.Group()
+
+
+
+
+
+
+
+
 
 
 # player init
@@ -69,10 +80,33 @@ class Playerob(pg.sprite.Sprite):
 
 
     def move(self,x, y, direction, frame):
+        global bgx, bgy
         # direction = north east south west / n,e,s,w so at least 4x8 frames needed
         self.rect = self.imgrect.move(screenX/2, screenY/2)
 
-        print(bgx)
+        # obstacle blocking
+
+        # "theoretically" move the player then look if he intersects with an obstacle and then either leave it be or move him back
+        self.rect.move(x, 0)
+        if pg.sprite.collide_rect(player, enemy):
+            x = 0
+        self.rect.move(-x, 0)
+
+        self.rect.move(0, y)
+        if pg.sprite.collide_rect(player, enemy):
+            y = 0
+        self.rect.move(0, -y)
+
+
+
+
+
+        #dont fuckin g move the rect move the map!!!!!!!!!!!!!!!!!!!!!!!!! change this later!!!!!!!!!!
+        #change bg x/y not player rect!!!!
+        bgx = x + bgx
+        bgy = y + bgy
+        self.rect.move(x, y)
+
         # animation
         if direction == "n":
             screen.blit(self.img[12 * 0 + frame], (screenX/2, screenY/2))
@@ -87,38 +121,16 @@ class Playerob(pg.sprite.Sprite):
 
 
 
-        # obstacle blocking
-        #print(pg.sprite.spritecollide(self, enemies_group, False))
-        if pg.sprite.collide_rect(player, enemy):
-            print("a")
-            obstacle = pg.sprite.spritecollide(self, obstacles, False) #fill in whats obstacle probably will create list
-            for i in obstacle:
-                print(obstacles)
-                # over x
-                if self.rect.centery >= obstacle[0].rect.centery:
-                    #may need to change to obstacle[i].rect.midtop[1]
-                    y = obstacle[0].rect.midtop[1]
-                else:
-                    y = obstacle[0].rect.midbottom[1]
-                if self.rect.centerx >= obstacle[0].rect.centerx:
-                    # may need to change to obstacle[i].rect.midtop[0]
-                    x = obstacle[0].rect.midleft[0]
-                else:
-                    x = obstacle[0].rect.midright[0]
-
-        #dont fuckin g move the rect move the map!!!!!!!!!!!!!!!!!!!!!!!!! change this later!!!!!!!!!!
-        #change bg x/y not player rect!!!!
-        self.rect.move(x, y)
 
 
 
 
 
 
-    def detectdamage(self, x, y):
+    def detectdamage(self):
         #print(pg.sprite.spritecollide(player, enemies_group, False))
         #pygame.sprite.spritecollideany
-        self.rect = self.imgrect.move(screenX/2 - x,screenY/2 - y)
+        self.rect = self.imgrect.move(screenX/2 - bgx,screenY/2 - bgy)
         #print(self.rect)
         #print(self.playerHp)
         if pg.sprite.collide_rect(player, enemy):
@@ -174,13 +186,22 @@ class Enemyob(pg.sprite.Sprite):
 
 
 
-    def enemypos(self, x, y, frame):
+    def enemypos(self, frame):
         #if self.enemyXch == -1:
         #    screen.blit(self.img[frame + 12], (x, y))
         #else:
         #    screen.blit(self.img[frame], (x, y))
-        screen.blit(self.img[frame], (x, y))
-        self.rect = self.imgrect.move(enemy.enemyX, enemy.enemyY)
+        if enemy.enemyX > 520:
+            enemy.enemyXch = -1
+        elif enemy.enemyX < 420:
+            enemy.enemyXch = 1
+        enemy.enemyX += enemy.enemyXch
+        if enemy.enemyXch == -1:
+            frame = frame + 12
+
+
+        screen.blit(self.img[frame], (enemy.enemyX + bgx, enemy.enemyY + bgy))
+        self.rect = self.imgrect.move(enemy.enemyX + bgx, enemy.enemyY + bgy)
         #screen.blit(self.img[frame], self.rect)
         #print(self.rect)
 
