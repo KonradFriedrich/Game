@@ -4,6 +4,11 @@ from PIL import Image
 import os, sys
 
 pg.init()
+pg.font.init()
+
+
+my_font = pg.font.SysFont('Comic Sans MS', 30)
+
 
 STARTPOSX = 0
 STARTPOSY = 0
@@ -35,6 +40,7 @@ plattack = pg.sprite.Group()
 
 
 INVISEVENT = pg.USEREVENT+1
+PLAYERDEATH = pg.USEREVENT+2
 
 
 
@@ -56,6 +62,7 @@ class Playerob(pg.sprite.Sprite):
         self.invincible = False
         self.rect = pg.rect
         self.nodes = []
+        self.text_surface = my_font.render(f'HP: {self.playerHp}', False, (255, 100, 100))
 
 
     def animationspliter(self, image, frames = 1):
@@ -140,9 +147,14 @@ class Playerob(pg.sprite.Sprite):
                 self.playerHp = self.playerHp - 1
                 print(self.playerHp)
                 self.invincible = True
+                self.text_surface = my_font.render(f'HP: {self.playerHp}', False, (255, 255, 255))
                 if self.playerHp == 0:
                     print("Player Died!")
-                    sys.exit()
+                    # timewindow to save urself with heals
+                    pg.time.set_timer(PLAYERDEATH, 100, loops=1)
+
+    def death(self):
+        self.text_surface = my_font.render('YOU HAVE DIED', False, (255, 120, 0))
 
 
 
@@ -229,7 +241,6 @@ class Enemyob(pg.sprite.Sprite):
             self.node.append(subpaths[0])
         else:
             print("paths")
-
 
 
 

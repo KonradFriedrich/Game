@@ -9,7 +9,6 @@ global \
 # init pg
 pg.init()
 
-
 clock = pg.time.Clock()
 
 bgxs = 0
@@ -91,6 +90,17 @@ while running:
         if event.type == INVISEVENT:
             print("event triggered")
             player.invincible = False
+            player.text_surface = my_font.render(f'HP: {player.playerHp}', False, (255, 100, 100))
+
+        if event.type == PLAYERDEATH:
+            player.death()
+            backg.set_alpha(70)
+            screen.blit(backg, (0, 0))
+            screen.blit(player.text_surface, (450, 450))
+            pg.display.update()
+            pg.time.wait(3000)
+            sys.exit()
+
 
     # move the player / map and obstacles, Walls, enemies usw....
     xchange, ychange = player.move(bgxs, bgys, playerstance, ultimateframe)
@@ -100,6 +110,9 @@ while running:
     #hold player inside map bounds
     #BorderCheck()
 
+
+    # shows HUD
+    screen.blit(player.text_surface, (50,50))
 
 
     # change player pos
