@@ -10,10 +10,6 @@ global \
 pg.init()
 
 
-obstacles = pg.sprite.Group()
-
-
-
 clock = pg.time.Clock()
 
 bgxs = 0
@@ -51,7 +47,8 @@ while running:
     backg = pygame.image.load('img/1024Black.png')
     screen.blit(backg, (0, 0))
     MapDraw()
-    obstacle1.simpledraw()
+    #obstacle1.simpledraw()
+    obstacle_group.draw(screen)
 
 
 
@@ -90,12 +87,18 @@ while running:
             if event.key == pg.K_DOWN:
                 bgys += PMS
 
-    # move the player / map
-    player.move(bgxs, bgys, playerstance, ultimateframe)
+        # player will be able to get hit again
+        if event.type == INVISEVENT:
+            print("event triggered")
+            player.invincible = False
+
+    # move the player / map and obstacles, Walls, enemies usw....
+    xchange, ychange = player.move(bgxs, bgys, playerstance, ultimateframe)
+    allspritemove(xchange, ychange)
 
 
     #hold player inside map bounds
-    BorderCheck()
+    #BorderCheck()
 
 
 

@@ -16,8 +16,6 @@ global \
 
 
 def BorderCheck():
-    #map borders
-
     if SD.bgx >= -SD.STARTPOSX:
         SD.bgx = -SD.STARTPOSX
     if SD.bgy >= -SD.STARTPOSY:
@@ -49,6 +47,9 @@ def MapSlicer(Map, screenW, screenH):
     theight = imgheight // math.ceil(columns)
     twidth = imgwidth // math.ceil(rows)
 
+    print("height: ", theight)
+    print("twidth: ", twidth)
+
 
     # cutting it small
     for i in range(0, math.ceil(rows)):
@@ -63,6 +64,7 @@ def MapSlicer(Map, screenW, screenH):
     RENDERY = math.ceil(SD.screenY / twidth) + 1
     ENDX = i
     ENDY = j
+
 
 
 
@@ -83,3 +85,8 @@ def MapDraw():
                 # draw the tile
                 square = pygame.image.load(f"img/tile#{xfirst + i}#{yfirst + j}#.png")
                 SD.screen.blit(square, (int(xfirst + i) * twidth + SD.bgx, int(yfirst + j) * theight + SD.bgy))
+
+
+def allspritemove(bgxs, bgys):
+    for sprite in SD.all_sprites:
+        sprite.rect.move_ip(bgxs, bgys)

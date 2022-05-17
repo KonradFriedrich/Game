@@ -3,11 +3,10 @@ import random
 from PIL import Image
 import os, sys
 
-
 pg.init()
 
-STARTPOSX = -300
-STARTPOSY = -300
+STARTPOSX = 0
+STARTPOSY = 0
 
 
 bgx = STARTPOSX
@@ -35,7 +34,7 @@ enattack = pg.sprite.Group()
 plattack = pg.sprite.Group()
 
 
-
+INVISEVENT = pg.USEREVENT+1
 
 
 
@@ -54,13 +53,12 @@ class Playerob(pg.sprite.Sprite):
         self.playerYch = 0
         self.playerHp = 3
         self.playerEffect = []
-        self.invincible = pg.time.Clock()
+        self.invincible = False
         self.rect = pg.rect
         self.nodes = []
 
 
     def animationspliter(self, image, frames = 1):
-        print("init")
         self.animation = Image.open(f"{image}.png")
         self.originalwidth, self.originalheight = self.animation.size
 
@@ -85,35 +83,38 @@ class Playerob(pg.sprite.Sprite):
         # direction = north east south west / n,e,s,w so at least 4x8 frames needed
         self.rect = self.imgrect.move(screenX/2, screenY/2)
 
-        # obstacle blocking
-
         # "theoretically" move the player then look if he intersects with an obstacle and then either leave it be or move him back
+        # if checks for improved runtime/ optimized calc power
+        if x != 0:
+            self.rect.move_ip(-x, 0)
+            if pg.sprite.spritecollide(player, obstacle_group, False):
+                self.rect.move_ip(x, 0)
+                x = 0
+                #"anti" check -> checks if player would be outside of room
+            elif not pg.sprite.spritecollide(player, map_area, False):
+                self.rect.move_ip(x, 0)
+                x = 0
 
-        #print("1:  " + str(self.rect.left))
-        #print(x)
-        self.rect.move_ip(x, 0)
-        #print("2:  " + str(self.rect.left))
-        if pg.sprite.collide_rect(player, obstacle1):
-            x = 0
-        #print("3:  " + str(self.rect.left))
-        self.rect.move_ip(-x, 0)
-        #print("4:  " + str(obstacle1.rect))
-
-        self.rect.move_ip(0, y)
-        if pg.sprite.collide_rect(player, obstacle1):
-            y = 0
-        self.rect.move_ip(0, -y)
+            else:
+                self.rect.move_ip(x, 0)
 
 
+        if y != 0:
+            self.rect.move_ip(0, -y)
+            if pg.sprite.spritecollide(player, obstacle_group, False):
+                self.rect.move_ip(0, y)
+                y = 0
+            elif not pg.sprite.spritecollide(player, map_area, False):
+                self.rect.move_ip(0, y)
+                y = 0
+            else:
+                self.rect.move_ip(0, y)
 
 
-
-        #dont fuckin g move the rect move the map!!!!!!!!!!!!!!!!!!!!!!!!! change this later!!!!!!!!!!
-        #change bg x/y not player rect!!!!
-        print(x)
+        # move the map -> actually moving the player
         bgx = x + bgx
         bgy = y + bgy
-        self.rect.move(x, y)
+
 
         # animation
         if direction == "n":
@@ -126,53 +127,42 @@ class Playerob(pg.sprite.Sprite):
             screen.blit(self.img[12 * 1 + frame], (screenX/2, screenY/2))
         elif direction == "idle":
             screen.blit(self.img[12 * 2 + frame], (screenX/2, screenY/2))
-
-
-
-
-
+        return x, y
 
 
 
 
     def detectdamage(self):
-        #print(pg.sprite.spritecollide(player, enemies_group, False))
-        #pygame.sprite.spritecollideany
-        self.rect = self.imgrect.move(screenX/2 - bgx,screenY/2 - bgy)
-        #print(self.rect)
-        #print(self.playerHp)
-        if pg.sprite.collide_rect(player, enemy):
-            self.invincible.tick()
-            #print("b")
-        #print(self.invincible.get_time)
-            #if self.invincible.get_time >= 1.5:
-                #self.playerHp = self.playerHp - 1
-            #print(pg.sprite.spritecollide(player, enemies_group, False))
-            #print("hawww yeah")
-            # maybe effects will be hard tho
-            # self.playerEffect.append("invis")
-        #if self.playerHp == 0:
-            #sys.exit()
-        #print(self.playerHp)
+        if pg.sprite.spritecollide(player, enemies_group, False):
+            if self.invincible == False:
+                # timer for 750 ms -> event -> invincibility gets cancelled
+                pg.time.set_timer(INVISEVENT, 750, loops=1)
+                self.playerHp = self.playerHp - 1
+                print(self.playerHp)
+                self.invincible = True
+                if self.playerHp == 0:
+                    print("Player Died!")
+                    sys.exit()
 
 
 
 class Enemyob(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, x, y, image, frames = 1):
         super().__init__()
         #self.enemyimg = pg.image.load(enemytype[0])
         self.img = []
         #self.enemyX = random.randint(0, screenX - 32)
-        self.enemyX = 420
+        self.enemyX = x
         self.enemyXch = 1
         #self.enemyY = random.randint(0, screenY - 32)
-        self.enemyY = 580
+        self.enemyY = y
         self.enemyYch = 0
         self.currentframe = 0
+        self.animationspliter(image, frames)
+        self.rect = self.imgrect.move(x + bgx, y + bgy)
 
 
-    def animationspliter(self, image, frames = 1):
-        print("init")
+    def animationspliter(self, image, frames):
         self.animation = Image.open(f"{image}.png")
         self.originalwidth, self.originalheight = self.animation.size
         print(self.originalwidth)
@@ -190,7 +180,6 @@ class Enemyob(pg.sprite.Sprite):
 
             i += 1
         self.imgrect = addframe.get_rect()
-        self.rect = self.imgrect.move(enemy.enemyX + bgx, enemy.enemyY +bgy)
 
 
 
@@ -332,28 +321,37 @@ class obstacle(pg.sprite.Sprite):
     def __init__(self, topleft, bottomright, image):
         #create coords by usinjg topleft and bottomright corner
         super().__init__()
-        self.rect = ((topleft[0], topleft[1]), (bottomright[0] - topleft[0], bottomright[1] - topleft[1]))
+        self.rect = pg.Rect((topleft[0] + bgx, topleft[1] + bgy), (bottomright[0] - topleft[0], bottomright[1] - topleft[1]))
         self.tl = topleft
         self.br = bottomright
-        self.img = pg.image.load(image)
+        self.image = pg.image.load(image)
 
         #self.rect = (self.tl[0], self.tl[1], self.br[0], self.br[1])
 
+
     def simpledraw(self):
         self.rect = ((self.tl[0] + bgx, self.tl[1] + bgy), (self.br[0] - self.tl[0], self.br[1] - self.tl[1]))
-        screen.blit(self.img, (self.tl[0] + bgx, self.tl[1] + bgy))
+        screen.blit(self.image, (self.tl[0] + bgx, self.tl[1] + bgy))
         #pg.draw.rect(screen, (0, 0, 0), (bgx self.rect)
 
 
 
+class area(pg.sprite.Sprite):
+    def __init__(self, topleft, bottomright):
+        super().__init__()
+        #create coords by usinjg topleft and bottomright corner
+        # <rect(0, 0, 36, 46)>      height:  178        twidth:  195
+        self.rect = pg.Rect((topleft[0] + bgx + 195 + 36, topleft[1] + bgy + 178 + 46), (bottomright[0] - topleft[0] - 72, bottomright[1] - topleft[1] - 92))
+        map_area.add(self)
+
+    def give_image(self, image):
+        self.image = pg.image.load(image)
 
 
 
 
-
-
-enemy = Enemyob()
-enemy.animationspliter("imgs/2xMinutaurAnimations", 36)
+enemy = Enemyob(420, 580, "imgs/2xMinutaurAnimations", 36)
+#enemy.animationspliter("imgs/2xMinutaurAnimations", 36)
 
 
 player = Playerob(hellboy)
@@ -366,7 +364,24 @@ enemies_group = pg.sprite.Group()
 enemies_group.add(enemy)
 
 
-obstacles = pg.sprite.Group()
-obstacles.add(enemy)
-obstacle1 = obstacle([400, 400], [450, 450], "img/red50.jpeg")
-obstacles.add(obstacle1)
+obstacle_group = pg.sprite.Group()
+#OBSTACLES.add(enemy)
+
+
+
+obstacle1 = obstacle([385, 320], [405, 340], "img/red50.jpeg")
+obstacle_group.add(obstacle1)
+
+# auf alle coordinaten 200 pixel wegen padding rechnen (passiert in der klasse)
+map_area = pg.sprite.Group()
+#room1 = area([385, 320], [865, 615])
+room1 = area([160, 90], [700, 480])
+room2 = area([545, 480], [600, 630])
+
+#groupd of all sprites except for the player
+all_sprites = pg.sprite.Group()
+all_sprites.add(obstacle_group)
+all_sprites.add(map_area)
+all_sprites.add(enemies_group)
+
+
