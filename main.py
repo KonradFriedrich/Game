@@ -47,7 +47,7 @@ while running:
     screen.blit(backg, (0, 0))
     MapDraw()
     #obstacle1.simpledraw()
-    obstacle_group.draw(screen)
+    #obstacle_group.draw(screen)
 
 
 
@@ -57,7 +57,6 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
-
         # movement x-y axis
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LEFT:
@@ -68,13 +67,8 @@ while running:
                 playerstance = "e"
             if event.key == pg.K_UP:
                 bgys += PMS
-                #playerstance = "n"
             if event.key == pg.K_DOWN:
                 bgys += -PMS
-                #playerstance = "s"
-
-
-
         # movement stop
         if event.type == pg.KEYUP:
             if event.key == pg.K_LEFT:
@@ -86,15 +80,17 @@ while running:
             if event.key == pg.K_DOWN:
                 bgys += PMS
 
+
         # player will be able to get hit again
         if event.type == INVISEVENT:
             print("event triggered")
             player.invincible = False
             player.text_surface = my_font.render(f'HP: {player.playerHp}', False, (255, 100, 100))
 
+        # Death of player, make respawn available
         if event.type == PLAYERDEATH:
             player.death()
-            backg.set_alpha(70)
+            backg.set_alpha(90)
             screen.blit(backg, (0, 0))
             screen.blit(player.text_surface, (450, 450))
             pg.display.update()
@@ -102,7 +98,7 @@ while running:
             sys.exit()
 
 
-    # move the player / map and obstacles, Walls, enemies usw....
+    # move the player -> map and obstacles, Walls, enemies usw....
     xchange, ychange = player.move(bgxs, bgys, playerstance, ultimateframe)
     allspritemove(xchange, ychange)
 

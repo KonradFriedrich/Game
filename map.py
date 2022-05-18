@@ -70,12 +70,11 @@ def MapSlicer(Map, screenW, screenH):
 
 
 
-def MapDraw():
 
+def MapDraw():
     # get the upper left tile
     xfirst = math.trunc(abs((SD.bgx) / twidth))
     yfirst = math.trunc(abs((SD.bgy) / theight))
-
 
     # draw enough adjacent tiles to fill screen
     for i in range(0, RENDERX):
@@ -85,6 +84,7 @@ def MapDraw():
                 # draw the tile
                 square = pygame.image.load(f"img/tile#{xfirst + i}#{yfirst + j}#.png")
                 SD.screen.blit(square, (int(xfirst + i) * twidth + SD.bgx, int(yfirst + j) * theight + SD.bgy))
+
 
 
 def allspritemove(bgxs, bgys):
